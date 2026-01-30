@@ -1,5 +1,6 @@
 node_modules
 npm-debug.log
 db/*.db
+!db/database.js
 logs/*
-.env 
+.env

@@ -12,6 +12,9 @@ RUN npm install --production
 # Copy seluruh source code
 COPY . .
 
+# PAKSA copy folder db secara eksplisit (Solusi untuk error MODULE_NOT_FOUND)
+COPY db/ ./db/
+
 # Pastikan folder database & logs ada dengan izin yang benar
 RUN mkdir -p db logs public/uploads/videos public/uploads/thumbnails && \
     chmod -R 777 db logs public/uploads

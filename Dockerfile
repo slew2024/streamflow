@@ -9,18 +9,20 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install --production
 
-# Copy the rest of the application
+# Copy seluruh source code
 COPY . .
 
-# Ensure necessary directories exist
-RUN mkdir -p db logs public/uploads/videos public/uploads/thumbnails
+# Pastikan folder database & logs ada dengan izin yang benar
+RUN mkdir -p db logs public/uploads/videos public/uploads/thumbnails && \
+    chmod -R 777 db logs public/uploads
 
-# Set environment variables
+# Debug: Pastikan file database.js ada (akan muncul di log build Render)
+RUN ls -la db/
+
 ENV PORT=7575
 ENV NODE_ENV=production
 
-# Expose the port
 EXPOSE 7575
 
-# Start command: generate secret then start app
-CMD ["sh", "-c", "npm run generate-secret && npm start"]
+# Jalankan aplikasi
+CMD ["sh", "-c", "npm run generate-secret && node app.js"]

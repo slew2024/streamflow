@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: streamflow
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run generate-secret
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: 20.20.0
+      - key: PORT
+        value: 7575
+      - key: SESSION_SECRET
+        generateValue: true
+    disk:
+      name: streamflow-data
+      mountPath: /opt/render/project/src/db
+      sizeGB: 1

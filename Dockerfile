@@ -12,13 +12,13 @@ RUN npm install --production
 # Copy seluruh source code
 COPY . .
 
-# --- PERBAIKAN KRUSIAL UNTUK RENDER ---
-# Pindahkan logika database ke luar folder 'db' agar tidak tertutup saat Mounting Disk
+# --- SOLUSI TUNTAS: Pindahkan database.js ke lokasi aman ---
 RUN mv db/database.js ./database_logic.js
 
-# Update referensi di kode agar mengarah ke lokasi baru
-RUN sed -i "s|require('../db/database')|require('../database_logic.js')|g" models/User.js
-RUN sed -i "s|require('./db/database')|require('./database_logic.js')|g" app.js
+# Update SEMUA referensi ke database di seluruh aplikasi
+RUN find . -type f -name "*.js" -exec sed -i "s|require('../db/database')|require('../database_logic.js')|g" {} \;
+RUN find . -type f -name "*.js" -exec sed -i "s|require('./db/database')|require('./database_logic.js')|g" {} \;
+RUN find . -type f -name "*.js" -exec sed -i "s|require('../../db/database')|require('../../database_logic.js')|g" {} \;
 
 # Pastikan folder database & logs ada
 RUN mkdir -p db logs public/uploads/videos public/uploads/thumbnails && \
